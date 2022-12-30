@@ -1,6 +1,7 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val openai_kotlin_client_version: String by project
 
 plugins {
     kotlin("jvm") version "1.7.22"
@@ -31,4 +32,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    // Aallam OpenAI Library - kotlin version
+    // https://github.com/Aallam/openai-kotlin
+    implementation("com.aallam.openai:openai-client:$openai_kotlin_client_version")
 }

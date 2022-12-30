@@ -48,11 +48,5 @@ fun Route.conversationRoute() {
                 )
             )
         }
-        get("{id}/edit") {
-            // Show a page with fields for editing an article
-        }
-        post("{id}") {
-            // Update or delete an article
-        }
     }
 }
