@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.services.aboutRoute
 import com.example.services.conversationRoute
 import io.ktor.server.routing.*
 import io.ktor.http.*
@@ -12,12 +13,12 @@ fun Application.configureRouting() {
 
     routing {
         get("/") {
-//            call.respondText("Hello World!")
-            call.respondRedirect("/conversation")
+            call.respondRedirect("/about")
         }
         static("/static") {
             resources("files")
         }
+        aboutRoute()
         conversationRoute()
     }
 }

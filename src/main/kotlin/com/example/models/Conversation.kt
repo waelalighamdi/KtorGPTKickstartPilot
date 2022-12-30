@@ -13,7 +13,7 @@ private constructor(val id: Int, val userQuestion: String, val chatGPTResponse: 
 }
 
 // val conversation = emptyList<Conversation>().toMutableList()
-val conversation = mutableListOf<Conversation>(
+val conversations = mutableListOf<Conversation>(
     Conversation.newQuestion(
         "tell me about chatGPT",
         """

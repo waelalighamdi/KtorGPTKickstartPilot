@@ -1,23 +1,52 @@
 package com.example.services
 
+import com.example.models.Conversation
+import com.example.models.conversations
 import io.ktor.server.application.*
+import io.ktor.server.freemarker.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 
 fun Route.conversationRoute() {
-    route(path = "/conversation") {
+    route(path = "/conversations") {
         get {
-            // Redirect and show about chatGPT page
-            call.respondRedirect("/static/aboutChatGPTandKtor.html")
+            // Show a list of conversation
+            call.respond(
+                FreeMarkerContent(
+                    template = "indexConversation.ftl",
+                    model = mapOf("conversations" to conversations)
+                )
+            )
         }
         get("new") {
-            // Show a page with fields for creating a new article
+            // Show a page with fields for creating a new conversation
+            call.respond(
+                FreeMarkerContent(
+                    template = "newConversation.ftl",
+                    model = null
+                )
+            )
         }
         post {
-            // Save an article
+            // Save a conversation
+            val formParameters = call.receiveParameters()
+            val userQuestion = formParameters.getOrFail("userQuestion")
+            val chatGPTResponse = formParameters.getOrFail("chatGPTResponse")
+            val newConversation = Conversation.newQuestion(userQuestion, chatGPTResponse)
+            conversations.add(newConversation)
+            call.respondRedirect("/conversations/${newConversation.id}")
         }
         get("{id}") {
-            // Show an article with a specific id
+            // Show a conversation with a specific id
+            val id = call.parameters.getOrFail("id").toInt()
+            call.respond(
+                FreeMarkerContent(
+                    template = "showConversation.ftl",
+                    model = mapOf("conversation" to conversations.find { it.id == id })
+                )
+            )
         }
         get("{id}/edit") {
             // Show a page with fields for editing an article
