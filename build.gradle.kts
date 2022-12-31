@@ -36,4 +36,6 @@ dependencies {
     // Aallam OpenAI Library - kotlin version
     // https://github.com/Aallam/openai-kotlin
     implementation("com.aallam.openai:openai-client:$openai_kotlin_client_version")
+    // required by Aallam OpenAI Library to have ktor-client engine.
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
 }

@@ -1,5 +1,8 @@
 package com.example.services
 
+import com.aallam.openai.api.completion.CompletionRequest
+import com.aallam.openai.api.model.ModelId
+import com.aallam.openai.client.OpenAI
 import com.example.models.Conversation
 import com.example.models.conversations
 import io.ktor.server.application.*
@@ -33,7 +36,19 @@ fun Route.conversationRoute() {
             // Save a conversation
             val formParameters = call.receiveParameters()
             val userQuestion = formParameters.getOrFail("userQuestion")
-            val chatGPTResponse = formParameters.getOrFail("chatGPTResponse")
+
+            // Aallam OpenAI Completion API
+            val apiKey = System.getenv("OPENAI_API_KEY")
+            val openAI = OpenAI(apiKey)
+            val davinci = openAI.model(modelId = ModelId(id = "text-davinci-003"))
+            val completionRequest = CompletionRequest(
+                model = davinci.id,
+                prompt = userQuestion,
+                temperature = 0.6,
+                maxTokens = 2048
+            )
+            val chatGPTResponse = openAI.completion(completionRequest).choices.first().text
+
             val newConversation = Conversation.newQuestion(userQuestion, chatGPTResponse)
             conversations.add(newConversation)
             call.respondRedirect("/conversations/${newConversation.id}")
@@ -47,6 +62,12 @@ fun Route.conversationRoute() {
                     model = mapOf("conversation" to conversations.find { it.id == id })
                 )
             )
+        }
+        post(path = "{id}") {
+            // delete a conversation with a specific id
+            val id = call.parameters.getOrFail("id").toInt()
+            conversations.removeIf { it.id == id }
+            call.respondRedirect("/conversations")
         }
     }
 }
