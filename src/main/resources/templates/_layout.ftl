@@ -42,6 +42,7 @@
             </style>
     </head>
     <body>
+    <br>
     <img src="/static/ktor_logo.png">
     <h1>Conversation with chatGPT </h1>
     <p><i>Powered by Ktor, Freemarker, and chatGPT!</i></p>
