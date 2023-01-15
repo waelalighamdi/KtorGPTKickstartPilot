@@ -12,11 +12,5 @@ fun Application.configureTemplating() {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
         outputFormat = HTMLOutputFormat.INSTANCE
     }
-
-    routing {
-        get("/html-freemarker") {
-            call.respond(FreeMarkerContent("index.ftl", mapOf("data" to IndexData(listOf(1, 2, 3))), ""))
-        }
-    }
 }
-data class IndexData(val items: List<Int>)
+
